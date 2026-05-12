@@ -8,91 +8,149 @@
   *, *::before, *::after { box-sizing: border-box; }
   html, body {
     margin: 0; padding: 0;
-    background: radial-gradient(ellipse at top, #1a1410 0%, #0a0806 100%);
-    color: #e8dcc4;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(90, 55, 25, 0.45) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 110%, rgba(40, 25, 15, 0.55) 0%, transparent 60%),
+      linear-gradient(180deg, #0d0905 0%, #18120a 50%, #0a0604 100%);
+    color: #e8d6a8;
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
     min-height: 100vh;
     overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
   }
   .wrap { max-width: 1280px; margin: 0 auto; padding: 16px; }
+
   .logo {
-    margin: 4px 0 14px 0;
-    line-height: 0;        /* prevent extra space below SVG baseline */
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+    margin: 6px 0 6px 0;
+    line-height: 0;
+    filter:
+      drop-shadow(0 2px 6px rgba(0,0,0,0.7))
+      drop-shadow(0 0 14px rgba(201, 138, 58, 0.18));
+    text-align: center;
   }
   .logo svg {
-    display: block;
-    height: clamp(28px, 5.5vw, 52px);  /* responsive sizing */
+    display: inline-block;
+    height: clamp(28px, 5.5vw, 52px);
     width: auto;
     max-width: 100%;
   }
+  .logo-ornament {
+    text-align: center;
+    color: #6a4f30;
+    font-size: 11px;
+    letter-spacing: 1.5em;
+    padding: 6px 0 10px 1.5em;       /* offset by 1 letter-space so it visually centers */
+    text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+  }
+
+  /* Layered wood + bronze frame around the stage */
   .stage {
     position: relative;
     width: 100%;
     aspect-ratio: 1280 / 542;
-    border-radius: 14px;
+    border-radius: 4px;
     overflow: hidden;
     background: #1a1410;
     box-shadow:
-      0 20px 60px -10px rgba(0,0,0,0.7),
-      0 0 0 1px rgba(255,200,140,0.08),
-      inset 0 0 60px rgba(0,0,0,0.35);
+      0 24px 70px -10px rgba(0,0,0,0.85),
+      0 0 0 1px #0d0905,
+      0 0 0 4px #3a2a1a,                /* inner dark wood */
+      0 0 0 5px #5a4530,                /* tarnished bronze edge */
+      0 0 0 7px #251810,                /* outer wood */
+      0 0 0 8px rgba(201, 138, 58, 0.18),
+      inset 0 0 60px rgba(0,0,0,0.4);
     cursor: pointer;
     outline: none;
   }
-  .stage:focus { box-shadow: 0 20px 60px -10px rgba(0,0,0,0.7), 0 0 0 2px #c98a3a, inset 0 0 60px rgba(0,0,0,0.35); }
+  .stage:focus {
+    box-shadow:
+      0 24px 70px -10px rgba(0,0,0,0.85),
+      0 0 0 1px #0d0905,
+      0 0 0 4px #5a4530,
+      0 0 0 5px #c9a960,                /* gold band when focused */
+      0 0 0 7px #251810,
+      0 0 0 8px rgba(201, 138, 58, 0.45),
+      inset 0 0 60px rgba(0,0,0,0.4);
+  }
   canvas#game {
     display: block;
     width: 100%; height: 100%;
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
   }
+
+  /* Hint overlay — parchment card with thin gold rules */
   .overlay-hint {
     position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
-    background: rgba(10,8,6,0.65);
+    background: rgba(10,8,6,0.70);
     color: #f0d9a8;
     font-size: clamp(14px, 2vw, 22px);
     text-align: center;
     pointer-events: none;
     transition: opacity 0.4s ease;
     z-index: 10; padding: 20px;
+    letter-spacing: 0.03em;
   }
   .overlay-hint.hidden { opacity: 0; }
   .overlay-hint .box {
-    background: rgba(20, 14, 8, 0.85);
-    border: 1px solid rgba(201, 138, 58, 0.4);
-    padding: 18px 24px;
-    border-radius: 10px;
-    backdrop-filter: blur(8px);
+    background: linear-gradient(180deg, rgba(34, 24, 14, 0.92), rgba(20, 14, 8, 0.92));
+    border: 1px solid rgba(201, 138, 58, 0.5);
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.6),
+      0 0 40px rgba(0,0,0,0.8),
+      inset 0 1px 0 rgba(255,200,140,0.12);
+    padding: 22px 32px;
+    border-radius: 6px;
+    position: relative;
   }
-  .overlay-hint .box strong { color: #f5c777; }
+  .overlay-hint .box::before,
+  .overlay-hint .box::after {
+    content: "";
+    position: absolute;
+    left: 18%; right: 18%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 138, 58, 0.5), transparent);
+  }
+  .overlay-hint .box::before { top: 8px; }
+  .overlay-hint .box::after { bottom: 8px; }
+  .overlay-hint .box strong { color: #f5c777; font-style: italic; }
 
+  /* Controls bar — carved wood plank with gold rule */
   .controls-bar {
-    margin-top: 14px;
+    margin-top: 16px;
     display: flex; flex-wrap: wrap; gap: 8px;
     justify-content: space-between; align-items: center;
-    background: linear-gradient(180deg, rgba(40,28,18,0.7), rgba(20,14,10,0.7));
-    border: 1px solid rgba(201,138,58,0.18);
-    border-radius: 10px;
-    padding: 12px 16px;
+    background: linear-gradient(180deg, rgba(50,36,22,0.85), rgba(26,18,10,0.85));
+    border: 1px solid rgba(201,138,58,0.28);
+    border-radius: 6px;
+    padding: 12px 18px;
     font-size: 13px;
+    letter-spacing: 0.02em;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 220, 160, 0.07),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+      0 4px 14px rgba(0,0,0,0.4);
   }
   .controls-bar .key {
     display: inline-block;
-    padding: 2px 7px; margin: 0 2px;
-    background: #2a1f15;
-    border: 1px solid #5c4530;
-    border-radius: 5px;
-    font-family: "SF Mono", Monaco, monospace;
+    padding: 3px 9px; margin: 0 3px;
+    background: linear-gradient(180deg, #3a2a1a 0%, #1a1208 100%);
+    border: 1px solid #6a5030;
+    border-bottom: 2px solid #2a1f15;
+    border-radius: 3px;
+    font-family: 'SF Mono', Monaco, monospace;
     font-size: 11px;
     color: #f0d9a8;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 220, 160, 0.1),
+      0 1px 1px rgba(0,0,0,0.3);
   }
-  .controls-bar .grp { display: inline-block; margin-right: 10px; white-space: nowrap; }
-  .controls-bar .grp .label { color: #b69a72; margin-left: 4px; }
+  .controls-bar .grp { display: inline-block; margin-right: 14px; white-space: nowrap; }
+  .controls-bar .grp .label { color: #b69a72; margin-left: 4px; font-style: italic; }
 
+  /* Touch buttons — enchanted-rune plaques */
   .touch-controls { margin-top: 14px; display: none; grid-template-columns: 1fr 1fr; gap: 12px; }
   .touch-pad, .touch-actions { display: grid; gap: 8px; }
   .touch-pad { grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr; }
@@ -100,26 +158,37 @@
   .tbtn {
     user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
     touch-action: manipulation;
-    background: linear-gradient(180deg, #3a2a1a 0%, #25180e 100%);
-    border: 1px solid #5c4530;
-    border-bottom: 3px solid #2a1f15;
+    background: linear-gradient(180deg, #4a3525 0%, #2a1f15 55%, #1a1208 100%);
+    border: 1px solid #6a5030;
+    border-top-color: #8a6540;
+    border-bottom: 3px solid #1a1208;
     color: #f0d9a8;
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
     font-size: 18px; font-weight: 600;
+    letter-spacing: 0.05em;
     padding: 18px 8px;
-    border-radius: 10px;
+    border-radius: 6px;
     text-align: center;
     cursor: pointer;
     transition: transform 0.05s, background 0.1s;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 220, 160, 0.18),
+      inset 0 -10px 14px rgba(0, 0, 0, 0.25),
+      0 2px 5px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 1px 0 rgba(0,0,0,0.6);
   }
   .tbtn:active, .tbtn.active {
-    background: linear-gradient(180deg, #25180e 0%, #3a2a1a 100%);
+    background: linear-gradient(180deg, #1a1208 0%, #3a2a1a 100%);
     transform: translateY(2px);
     border-bottom-width: 1px;
+    box-shadow:
+      inset 0 2px 5px rgba(0, 0, 0, 0.55),
+      0 1px 2px rgba(0, 0, 0, 0.4);
   }
-  .tbtn.attack { background: linear-gradient(180deg, #5a2a1a 0%, #3a1a0e 100%); border-color: #8a4530; }
-  .tbtn.defend { background: linear-gradient(180deg, #1a3a4a 0%, #0e2030 100%); border-color: #305c7a; }
-  .tbtn.jump { background: linear-gradient(180deg, #3a3a1a 0%, #1e1e0e 100%); border-color: #6a5c30; }
-  .tbtn .lbl { display: block; font-size: 10px; opacity: 0.7; margin-top: 2px; font-weight: 400; letter-spacing: 0.05em; }
+  .tbtn.attack { background: linear-gradient(180deg, #6a2820 0%, #3a140a 100%); border-color: #8a4030; border-top-color: #c06040; }
+  .tbtn.defend { background: linear-gradient(180deg, #1a3a5a 0%, #0e2040 100%); border-color: #305c8a; border-top-color: #5080c0; }
+  .tbtn.jump   { background: linear-gradient(180deg, #4a3a1a 0%, #2a200e 100%); border-color: #7a6030; border-top-color: #a08040; }
+  .tbtn .lbl { display: block; font-size: 10px; opacity: 0.75; margin-top: 2px; font-weight: 400; letter-spacing: 0.05em; font-style: italic; }
   .spacer { visibility: hidden; }
 
   @media (max-width: 720px), (pointer: coarse) {
@@ -130,41 +199,100 @@
     .controls-bar .desktop-only { display: none; }
   }
   .footer-note {
-    margin-top: 10px;
+    margin-top: 14px;
     font-size: 11px;
-    color: #8a7558;
+    color: #6a5538;
     text-align: center;
     font-style: italic;
+    letter-spacing: 0.06em;
   }
+  .footer-note::before { content: "✦ "; color: #4a3520; letter-spacing: 0.5em; }
+  .footer-note::after  { content: " ✦"; color: #4a3520; letter-spacing: 0.5em; }
 
+  /* Level + music plaques — engraved aged metal */
   .levels {
     display: flex;
-    gap: 6px;
-    margin: 0 0 10px 0;
+    gap: 8px;
+    margin: 12px 0 12px 0;
     flex-wrap: wrap;
+    align-items: center;
   }
-  .level-btn {
-    background: linear-gradient(180deg, #3a2a1a 0%, #25180e 100%);
-    border: 1px solid #5c4530;
-    border-bottom: 3px solid #2a1f15;
+  .level-btn,
+  .music-btn {
+    position: relative;
+    background: linear-gradient(180deg, #3a2a1a 0%, #25180e 55%, #1a1208 100%);
+    border: 1px solid #6a4f30;
+    border-top-color: #8a6540;
+    border-bottom: 3px solid #1a1208;
     color: #c5a878;
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-family: inherit;
-    font-size: 11px;
+    padding: 7px 18px;
+    border-radius: 4px;
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+    font-size: 12px;
     cursor: pointer;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     font-weight: 600;
     user-select: none;
-    transition: transform 0.05s;
+    transition: transform 0.05s, color 0.2s, box-shadow 0.2s;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 220, 160, 0.12),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.35),
+      0 1px 3px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.75);
   }
-  .level-btn:hover { color: #f0d9a8; }
-  .level-btn:active { transform: translateY(1px); border-bottom-width: 2px; }
-  .level-btn.active {
+  .level-btn:hover,
+  .music-btn:hover {
     color: #f0d9a8;
-    background: linear-gradient(180deg, #5a4530 0%, #3a2a1a 100%);
-    border-color: #8a6540;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 220, 160, 0.18),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.35),
+      0 1px 3px rgba(0, 0, 0, 0.5),
+      0 0 14px rgba(201, 138, 58, 0.25);
+  }
+  .level-btn:active,
+  .music-btn:active { transform: translateY(1px); border-bottom-width: 2px; }
+  .level-btn.active {
+    color: #f5e6c0;
+    background: linear-gradient(180deg, #7a5a35 0%, #3a2a1a 55%, #251810 100%);
+    border-color: #a88040;
+    border-top-color: #c9a960;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 220, 160, 0.25),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.45),
+      0 0 18px rgba(201, 138, 58, 0.35);
+  }
+  /* Diamond ornaments flank the active level name */
+  .level-btn.active::before {
+    content: "◆";
+    color: #c9a960; font-size: 8px;
+    margin-right: 10px; vertical-align: middle;
+    text-shadow: 0 0 6px rgba(201, 138, 58, 0.7);
+  }
+  .level-btn.active::after {
+    content: "◆";
+    color: #c9a960; font-size: 8px;
+    margin-left: 10px; vertical-align: middle;
+    text-shadow: 0 0 6px rgba(201, 138, 58, 0.7);
+  }
+
+  .music-btn {
+    background: linear-gradient(180deg, #2a2030 0%, #181020 55%, #0e0818 100%);
+    border-color: #5a4570;
+    border-top-color: #7a5a90;
+    color: #9a8ab0;
+    margin-left: auto;
+  }
+  .music-btn:hover { color: #d0c0e8; }
+  .music-btn.on {
+    color: #f0e0ff;
+    background: linear-gradient(180deg, #6a4f8a 0%, #2a1f3a 55%, #1a0e25 100%);
+    border-color: #8a6ab0;
+    border-top-color: #b090d8;
+    box-shadow:
+      inset 0 1px 0 rgba(220, 200, 255, 0.25),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.45),
+      0 0 18px rgba(170, 130, 220, 0.5);
   }
 </style>
 </head>
@@ -200,9 +328,11 @@
   </g>
 </svg>
   </div>
+  <div class="logo-ornament">✦ ✦ ✦</div>
   <div class="levels">
     <button class="level-btn active" data-level="forest">Forest</button>
     <button class="level-btn" data-level="highlands">Highlands</button>
+    <button class="music-btn" id="musicToggle" aria-label="Toggle music">♪ Music</button>
   </div>
   <div class="stage" id="stage" tabindex="0">
     <canvas id="game"></canvas>
@@ -468,6 +598,16 @@ document.querySelectorAll('.level-btn').forEach(btn => {
 });
 
 stage.addEventListener('click', () => { stage.focus(); hideHint(); });
+
+// Music toggle
+document.getElementById('musicToggle').addEventListener('click', () => {
+  const btn = document.getElementById('musicToggle');
+  const next = !musicEnabled;
+  setMusicEnabled(next);
+  btn.classList.toggle('on', next);
+  btn.textContent = next ? '♪ Music ON' : '♪ Music';
+  stage.focus();
+});
 stage.addEventListener('touchstart', () => { hideHint(); }, { passive: true });
 
 function hideHint() { hint.classList.add('hidden'); }
@@ -490,6 +630,149 @@ let hitFlash = 0;
 let particles = [];
 let impactPops = [];
 const GOO_COLORS = ['#2a1626', '#3d1f1a', '#4d2e26', '#1a0e14', '#5a3a3a', '#6b4538'];
+
+// ============================
+// Generative ambient music (Web Audio)
+// Forest theme: A minor pentatonic + soft pads
+// Highlands theme: D major (Lydian-ish) + airier pads, slower pace
+// ============================
+let audioCtx = null;
+let musicGain = null;
+let musicEnabled = false;
+let musicNextTick = 0;
+let lastMelodyIdx = 4;
+
+function ensureAudio() {
+  if (audioCtx) return;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return;
+  audioCtx = new AC();
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 2400;
+  filter.Q.value = 0.5;
+  musicGain = audioCtx.createGain();
+  musicGain.gain.value = 0;
+  musicGain.connect(filter).connect(audioCtx.destination);
+}
+function midi2freq(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+
+function playTone(midi, when, dur, vol, type, attack) {
+  attack = attack || 0.03;
+  const osc = audioCtx.createOscillator();
+  const env = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.value = midi2freq(midi);
+  env.gain.setValueAtTime(0.0001, when);
+  env.gain.linearRampToValueAtTime(vol, when + attack);
+  env.gain.linearRampToValueAtTime(vol * 0.55, when + Math.max(attack + 0.1, dur - 0.4));
+  env.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+  osc.connect(env).connect(musicGain);
+  osc.start(when);
+  osc.stop(when + dur + 0.05);
+}
+
+function playPad(midi, when, dur, vol) {
+  // Two slightly detuned sine oscillators for a warm pad
+  const env = audioCtx.createGain();
+  env.gain.setValueAtTime(0.0001, when);
+  env.gain.linearRampToValueAtTime(vol, when + 1.5);
+  env.gain.linearRampToValueAtTime(vol, when + dur - 2.0);
+  env.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+  env.connect(musicGain);
+  for (const detune of [-3, 3]) {
+    const osc = audioCtx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = midi2freq(midi);
+    osc.detune.value = detune;
+    osc.connect(env);
+    osc.start(when);
+    osc.stop(when + dur + 0.05);
+  }
+}
+
+const THEMES = {
+  forest: {
+    // A minor pentatonic extended (mystical/magical)
+    scale: [57, 60, 62, 64, 67, 69, 72, 74, 76, 79],
+    padChords: [
+      [45, 52, 57, 60],  // Am: A2 E3 A3 C4
+      [50, 57, 60, 65],  // Dm: D3 A3 C4 F4
+      [43, 50, 55, 59],  // G:  G2 D3 G3 B3
+    ],
+    bassNotes: [45, 45, 50, 52],   // A2 A2 D3 E3
+    tempo: 0.55,
+    melodyVol: 0.13,
+    padVol: 0.045,
+  },
+  highlands: {
+    // D major / Lydian — open, expansive
+    scale: [50, 52, 54, 57, 59, 62, 66, 69, 71, 74],
+    padChords: [
+      [38, 45, 50, 54],  // D2 A2 D3 F#3
+      [40, 47, 52, 59],  // E2 B2 E3 B3
+      [43, 50, 55, 59],  // G2 D3 G3 B3
+    ],
+    bassNotes: [38, 38, 43, 45],
+    tempo: 0.78,
+    melodyVol: 0.12,
+    padVol: 0.05,
+  },
+};
+
+function scheduleMusic() {
+  if (!audioCtx || !musicEnabled) return;
+  const theme = THEMES[currentLevel] || THEMES.forest;
+  const lookAhead = 3.0;
+  const now = audioCtx.currentTime;
+
+  while (musicNextTick < now + lookAhead) {
+    // Melody — walk through scale by ±1–3 steps for natural motion
+    const step = Math.floor(Math.random() * 7) - 3;
+    lastMelodyIdx = Math.max(0, Math.min(theme.scale.length - 1, lastMelodyIdx + step));
+    const note = theme.scale[lastMelodyIdx];
+
+    // Skip notes ~25% of the time for rhythmic breathing
+    if (Math.random() > 0.25) {
+      const dur = 0.7 + Math.random() * 1.3;
+      const vol = theme.melodyVol * (0.7 + Math.random() * 0.5);
+      playTone(note, musicNextTick, dur, vol, 'triangle', 0.02);
+    }
+    // Pad chord ~12% of beats — sustained background harmony
+    if (Math.random() < 0.12) {
+      const chord = theme.padChords[Math.floor(Math.random() * theme.padChords.length)];
+      for (const c of chord) {
+        playPad(c, musicNextTick, 7 + Math.random() * 2, theme.padVol);
+      }
+    }
+    // Occasional bass note
+    if (Math.random() < 0.16) {
+      const bass = theme.bassNotes[Math.floor(Math.random() * theme.bassNotes.length)];
+      playTone(bass, musicNextTick, 1.8 + Math.random(), 0.08, 'sine', 0.05);
+    }
+    musicNextTick += theme.tempo * (0.8 + Math.random() * 0.6);
+  }
+  setTimeout(scheduleMusic, 1000);
+}
+
+function setMusicEnabled(on) {
+  ensureAudio();
+  if (!audioCtx) return;
+  musicEnabled = on;
+  if (on) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    musicNextTick = audioCtx.currentTime + 0.1;
+    lastMelodyIdx = Math.floor(THEMES[currentLevel].scale.length / 2);
+    musicGain.gain.cancelScheduledValues(audioCtx.currentTime);
+    musicGain.gain.setValueAtTime(musicGain.gain.value, audioCtx.currentTime);
+    musicGain.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + 1.0);
+    scheduleMusic();
+  } else {
+    musicGain.gain.cancelScheduledValues(audioCtx.currentTime);
+    musicGain.gain.setValueAtTime(musicGain.gain.value, audioCtx.currentTime);
+    musicGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.6);
+  }
+}
 
 // Ambient fireflies — forest only, drift via sine + soft pulse
 const FIREFLY_COUNT = 11;
