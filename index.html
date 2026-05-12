@@ -356,6 +356,48 @@
     80%  { transform: translate(-8px, -78px) scale(0.9);  opacity: 0.6; }
     100% { transform: translate(0, -110px) scale(1);      opacity: 0; }
   }
+
+  /* Animated smoke wisp — overlays the painted smoke stream on the book illustration */
+  .smoke-stream {
+    position: absolute;
+    left: 7%;
+    top: 0;
+    width: 16%;
+    height: 96%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+    mix-blend-mode: screen;
+  }
+  .smoke-puff {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 72px;
+    height: 72px;
+    margin-left: -36px;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+                rgba(232, 224, 214, 0.55) 0%,
+                rgba(208, 200, 192, 0.30) 35%,
+                rgba(180, 174, 168, 0.10) 65%,
+                rgba(160, 155, 150, 0) 80%);
+    filter: blur(6px);
+    animation-name: smoke-rise;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-out;
+    will-change: transform, opacity;
+  }
+  .smoke-puff.small { width: 42px; height: 42px; margin-left: -21px; filter: blur(4px); }
+  .smoke-puff.large { width: 104px; height: 104px; margin-left: -52px; filter: blur(11px); }
+  @keyframes smoke-rise {
+    0%   { transform: translate(0, 0) scale(0.45);     opacity: 0; }
+    10%  { opacity: 0.55; }
+    25%  { transform: translate(-12px, -110px) scale(0.75); opacity: 0.6; }
+    50%  { transform: translate(10px, -240px) scale(1.05);  opacity: 0.5; }
+    75%  { transform: translate(-6px, -370px) scale(1.4);   opacity: 0.3; }
+    100% { transform: translate(4px, -490px) scale(1.85);   opacity: 0; }
+  }
   .home-btn {
     background: none;
     border: 0;
@@ -543,6 +585,16 @@
         <div class="magic-particle small" style="left:91%; bottom:38%; animation-duration:8.5s; animation-delay:-3.0s;"></div>
         <div class="magic-particle med"   style="left:18%; bottom:46%; animation-duration:12.5s;animation-delay:-5.8s;"></div>
         <div class="magic-particle small" style="left:73%; bottom:48%; animation-duration:9.2s; animation-delay:-7.6s;"></div>
+      </div>
+      <div class="smoke-stream" aria-hidden="true">
+        <div class="smoke-puff small" style="animation-duration: 8s;  animation-delay: 0s;"></div>
+        <div class="smoke-puff"       style="animation-duration: 11s; animation-delay: -1.8s;"></div>
+        <div class="smoke-puff large" style="animation-duration: 14s; animation-delay: -4.5s;"></div>
+        <div class="smoke-puff"       style="animation-duration: 9.5s; animation-delay: -2.7s;"></div>
+        <div class="smoke-puff small" style="animation-duration: 10s; animation-delay: -6.4s;"></div>
+        <div class="smoke-puff large" style="animation-duration: 12.5s; animation-delay: -8.1s;"></div>
+        <div class="smoke-puff"       style="animation-duration: 10.5s; animation-delay: -3.6s;"></div>
+        <div class="smoke-puff small" style="animation-duration: 9s;  animation-delay: -5.2s;"></div>
       </div>
       <div class="home-buttons">
         <button class="home-btn" id="btnStart" aria-label="Start game">
